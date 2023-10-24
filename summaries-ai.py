@@ -1,5 +1,4 @@
 from dotenv import load_dotenv
-# from langchain.document_loaders import WebBaseLoader
 from langchain.document_loaders import PyPDFLoader
 from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
@@ -77,8 +76,6 @@ def summarise(filename):
     refine_prompt = PromptTemplate.from_template(refine_template)
 
     # Define the LLM
-    # here we are using OpenAI's ChatGPT
-    # llm=select_llm()
     # llm = OpenAI()
     llm = ChatOpenAI(model_name="gpt-4", temperature=0, request_timeout=120)
 
