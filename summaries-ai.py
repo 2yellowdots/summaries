@@ -11,11 +11,14 @@ import json
 import shutil
 from langchain.llms import OpenAI, GPT4All
 
+# Common variables
+directory_path = "./documents"
+destination_directory = "./summarised"
+model = "gpt-4"
+temperature = 1.0
 
 # Get the list from the documents directory
 def getfiles():
-    directory_path = "./documents"
-
     # List all files in the directory
     file_names = os.listdir(directory_path)
 
@@ -30,9 +33,6 @@ def summarise(filename):
     LLM_KEY = os.environ.get("OPENAI_API_KEY")
 
     text = ""
-
-    # Directory path
-    directory_path = "./documents"
 
     # Combine the directory and filename using os.path.join()
     source_file = os.path.join(directory_path, filename)
@@ -77,7 +77,7 @@ def summarise(filename):
 
     # Define the LLM
     # llm = OpenAI()
-    llm = ChatOpenAI(model_name="gpt-4", temperature=0, request_timeout=120)
+    llm = ChatOpenAI(model_name=model, temperature=temperature, request_timeout=120)
 
     refine_chain = load_summarize_chain(
         llm,
@@ -110,14 +110,8 @@ def savedata(filename, summary):
 
 
 def relocatefile(file_name):
-    # Directory path
-    directory_path = "./documents"
-
     # Combine the directory and filename using os.path.join()
     source_file = os.path.join(directory_path, file_name)
-
-    # Destination directory (the directory where you want to move the file)
-    destination_directory = "./summarised"
 
     # Combine the destination directory with the source file name to get the new file path
     new_file_path = os.path.join(destination_directory, os.path.basename(source_file))
