@@ -10,6 +10,7 @@ import os
 import json
 import shutil
 from langchain.llms import OpenAI, GPT4All
+from datetime import datetime
 
 # Common variables
 directory_path = "./documents"
@@ -98,14 +99,19 @@ def summarise(filename):
 
 # Save summary to a file
 def savedata(filename, summary):
-    data = {
+    # Get today's date
+    today = datetime.now()
+    formatted_date = today.strftime("%Y-%m-%d")
+
+    data = [{
         "id": filename,
-        "created": null,
+        "name": filename,
+        "created": formatted_date,
         "owner": "openai",
         "summary": summary,
-        "permissions": null,
-        "ready": true
-    }
+        "permissions": True,
+        "ready": True
+    }]
 
     # New filename with .json extension
     file_name = os.path.splitext(filename)[0] + ".json"
@@ -113,7 +119,7 @@ def savedata(filename, summary):
 
     # Open the file in write mode and save the data as JSON
     with open(destination_file, 'w') as json_file:
-        json.dump(data, json_file, indent=4)
+        json.dumps(data, json_file, indent=4)
 
     print(f"Data has been saved to {file_name}")
 
