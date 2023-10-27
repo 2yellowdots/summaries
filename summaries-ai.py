@@ -13,7 +13,7 @@ from langchain.llms import OpenAI, GPT4All
 
 # Common variables
 directory_path = "./documents"
-destination_directory = "./summarised"
+destination_path = "./summarise"
 model = "gpt-4"
 temperature = 1.0
 
@@ -90,28 +90,37 @@ def summarise(filename):
     )
     refine_outputs = refine_chain({'input_documents': texts})
     print(refine_outputs['output_text'])
+    # Save the data to file
     savedata(filename, refine_outputs['output_text'])
+    # Move the original file
+    relocatefile(filename)
 
 
 # Save summary to a file
 def savedata(filename, summary):
     data = {
-        "summary": summary
+        "id": filename,
+        "created": null,
+        "owner": "openai",
+        "summary": summary,
+        "permissions": null,
+        "ready": true
     }
 
     # New filename with .json extension
     file_name = os.path.splitext(filename)[0] + ".json"
+    destination_file = os.path.join(destination_path, file_name)
 
     # Open the file in write mode and save the data as JSON
-    with open(file_name, 'w') as json_file:
+    with open(destination_file, 'w') as json_file:
         json.dump(data, json_file, indent=4)
 
     print(f"Data has been saved to {file_name}")
 
 
-def relocatefile(file_name):
+def relocatefile(filename):
     # Combine the directory and filename using os.path.join()
-    source_file = os.path.join(directory_path, file_name)
+    source_file = os.path.join(directory_path, filename)
 
     # Combine the destination directory with the source file name to get the new file path
     new_file_path = os.path.join(destination_directory, os.path.basename(source_file))
