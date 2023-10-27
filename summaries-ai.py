@@ -129,7 +129,7 @@ def relocatefile(filename):
     source_file = os.path.join(directory_path, filename)
 
     # Combine the destination directory with the source file name to get the new file path
-    new_file_path = os.path.join(destination_directory, os.path.basename(source_file))
+    new_file_path = os.path.join(destination_path, os.path.basename(source_file))
 
     # Move the file to the destination directory
     shutil.move(source_file, new_file_path)
